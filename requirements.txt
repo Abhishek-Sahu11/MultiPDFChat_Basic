@@ -1,0 +1,10 @@
+streamlit
+pypdf
+python-dotenv
+
+langchain
+langchain-text-splitters
+langchain-google-genai
+
+langchain-huggingface
+sentence-transformers
