@@ -16,15 +16,29 @@ from langchain_core.vectorstores import InMemoryVectorStore
 
 
 # -----------------------------------------
+# Streamlit page configuration
+# -----------------------------------------
+
+st.set_page_config(
+    page_title="Multi-PDF RAG Chatbot",
+    page_icon="📚",
+    layout="wide"
+)
+
+
+# -----------------------------------------
 # 1. Environment configuration
 # -----------------------------------------
 
 load_dotenv()
 
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+try:
+    GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
+except Exception:
+    GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
 if not GOOGLE_API_KEY:
-    st.error("GOOGLE_API_KEY is missing. Check your .env file.")
+    st.error("GOOGLE_API_KEY is missing. Configure it in your .env file or Streamlit Secrets.")
     st.stop()
 
 
@@ -188,22 +202,16 @@ def generate_answer(question, retrieved_docs):
         st.error(
             "Gemini is temporarily unavailable. "
             "Please try again in a few minutes."
-      )
+        )
 
-    print(f"Gemini API Error: {e}")
+        print(f"Gemini API Error: {e}")
 
-    return None
+        return None
 
 
 # -----------------------------------------
 # 9. Streamlit application
 # -----------------------------------------
-
-st.set_page_config(
-    page_title="Multi-PDF RAG Chatbot",
-    page_icon="📚",
-    layout="wide"
-)
 
 st.title("📚 Chat with Multiple PDFs")
 st.caption("RAG application using LangChain, Gemini and InMemoryVectorStore")
